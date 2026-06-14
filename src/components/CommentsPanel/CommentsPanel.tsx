@@ -173,11 +173,6 @@ export default function CommentsPanel({ isOpen, onClose, videoId, onCommentCount
             : 'translate-y-full md:translate-x-full md:translate-y-0'
         }`}
       >
-        {/* Mobile Drag Handle Indicator */}
-        <div className="w-full flex justify-center pt-3.5 pb-1 md:hidden flex-shrink-0">
-          <div className="w-12 h-1.5 rounded-full bg-white/20" />
-        </div>
-
         <div className="flex items-center justify-between p-5 border-b border-glass-border flex-shrink-0">
           <span className="text-base font-bold">Bình luận ({comments.length})</span>
           <button className="text-white/60 p-1 rounded-full transition-all duration-200 hover:bg-white/8 hover:text-white" onClick={onClose}>

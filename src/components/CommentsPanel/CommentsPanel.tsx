@@ -167,7 +167,7 @@ export default function CommentsPanel({ isOpen, onClose, videoId, onCommentCount
 
       {/* Main Slide-in Panel - Bottom Sheet on Mobile (75% height), Right Sidebar on Desktop */}
       <div
-        className={`fixed z-[201] flex flex-col bg-[#16161b]/95 backdrop-blur-[25px] transition-transform duration-300 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] bottom-0 left-0 right-0 w-full h-[75vh] rounded-t-[24px] border-t border-glass-border md:top-0 md:right-0 md:left-auto md:w-[400px] md:max-w-[85vw] md:h-screen md:rounded-t-none md:border-t-0 md:border-l md:shadow-[-10px_0_30px_rgba(0,0,0,0.5)] ${
+        className={`fixed z-[201] flex flex-col bg-[#16161b]/95 backdrop-blur-[25px] transition-transform duration-300 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] bottom-0 left-0 right-0 w-full h-[75vh] rounded-t-[24px] border-none md:top-0 md:right-0 md:left-auto md:w-[400px] md:max-w-[85vw] md:h-screen md:rounded-t-none md:border-l md:border-glass-border md:shadow-[-10px_0_30px_rgba(0,0,0,0.5)] ${
           isOpen
             ? 'translate-y-0 md:translate-x-0'
             : 'translate-y-full md:translate-x-full md:translate-y-0'

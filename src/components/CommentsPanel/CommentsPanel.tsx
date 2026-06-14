@@ -165,13 +165,20 @@ export default function CommentsPanel({ isOpen, onClose, videoId, onCommentCount
         onClick={onClose}
       />
 
-      {/* Main Slide-in Panel - Right side on all devices, slide in from right to left */}
+      {/* Main Slide-in Panel - Bottom Sheet on Mobile (75% height), Right Sidebar on Desktop */}
       <div
-        className={`fixed z-[201] flex flex-col bg-[#16161b]/95 backdrop-blur-[25px] border-l border-glass-border transition-transform duration-300 top-0 right-0 w-[400px] max-w-[85vw] h-screen shadow-[-10px_0_30px_rgba(0,0,0,0.5)] ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed z-[201] flex flex-col bg-[#16161b]/95 backdrop-blur-[25px] transition-transform duration-300 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] bottom-0 left-0 right-0 w-full h-[75vh] rounded-t-[24px] border-t border-glass-border md:top-0 md:right-0 md:left-auto md:w-[400px] md:max-w-[85vw] md:h-screen md:rounded-t-none md:border-t-0 md:border-l md:shadow-[-10px_0_30px_rgba(0,0,0,0.5)] ${
+          isOpen
+            ? 'translate-y-0 md:translate-x-0'
+            : 'translate-y-full md:translate-x-full md:translate-y-0'
         }`}
       >
-        <div className="flex items-center justify-between p-5 border-b border-glass-border">
+        {/* Mobile Drag Handle Indicator */}
+        <div className="w-full flex justify-center pt-3.5 pb-1 md:hidden flex-shrink-0">
+          <div className="w-12 h-1.5 rounded-full bg-white/20" />
+        </div>
+
+        <div className="flex items-center justify-between p-5 border-b border-glass-border flex-shrink-0">
           <span className="text-base font-bold">Bình luận ({comments.length})</span>
           <button className="text-white/60 p-1 rounded-full transition-all duration-200 hover:bg-white/8 hover:text-white" onClick={onClose}>
             <X size={20} />

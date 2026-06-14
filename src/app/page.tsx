@@ -302,7 +302,7 @@ export default function Home() {
       <Sidebar currentTab={currentTab} onChangeTab={handleTabChange} />
 
       {/* Main content viewport */}
-      <div className="flex-1 h-screen relative overflow-hidden md:ml-[280px] max-md:h-[calc(100vh-64px)]">
+      <div className="flex-1 h-screen relative overflow-hidden md:ml-[280px]">
         {renderContent()}
       </div>
 

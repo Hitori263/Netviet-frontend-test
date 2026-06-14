@@ -6,7 +6,7 @@ const initialVideos: VideoData[] = [
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
     authorName: "bunny_adventures",
     authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-    description: "Big Buck Bunny animated film trailer. Classic, cute and always fun! 🐰 #animation #cartoon #classic #retro #nature #fun",
+    description: "Big Buck Bunny animated film trailer. Classic, cute and always fun! 🐰 This is a super long description to test the text-clamping feature and the 'more' button on mobile devices. This description is written very long to ensure it exceeds the default 3-line limit, verifying that the dynamic collapse and expand logic function perfectly. Thank you for watching and supporting this lovely chubby bunny! #animation #cartoon #classic #retro #nature #fun #bigbunny #test #longdescription",
     likesCount: 1420,
     commentsCount: 3,
     sharesCount: 324,
@@ -107,11 +107,15 @@ const globalForMock = global as unknown as {
 
 export const mockVideos = globalForMock.mockVideosDatabase || initialVideos;
 
-// Ensure playsCount is defined for all videos (useful if global database was created before adding playsCount)
+// Ensure playsCount and static text fields like description are updated from initialVideos to global database
 mockVideos.forEach((video) => {
-  if (video.playsCount === undefined) {
-    const init = initialVideos.find((v) => v.id === video.id);
-    video.playsCount = init ? init.playsCount : 0;
+  const init = initialVideos.find((v) => v.id === video.id);
+  if (init) {
+    video.description = init.description;
+    video.songName = init.songName;
+    if (video.playsCount === undefined) {
+      video.playsCount = init.playsCount;
+    }
   }
 });
 

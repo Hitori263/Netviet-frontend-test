@@ -14,7 +14,7 @@ interface VideoFeedProps {
 
 export default function VideoFeed({ videos, loading, onVideoUpdate, initialVideoId, onClearInitialVideoId }: VideoFeedProps) {
   const [activeId, setActiveId] = useState<string | null>(initialVideoId || null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(!initialVideoId);
   const feedRef = useRef<HTMLDivElement>(null);
@@ -30,7 +30,7 @@ export default function VideoFeed({ videos, loading, onVideoUpdate, initialVideo
   useEffect(() => {
     if (initialVideoId && feedRef.current) {
       const container = feedRef.current;
-      
+
       const timer = setTimeout(() => {
         const targetCard = container.querySelector(`[data-video-id="${initialVideoId}"]`);
         if (targetCard) {
@@ -38,7 +38,7 @@ export default function VideoFeed({ videos, loading, onVideoUpdate, initialVideo
           container.style.scrollBehavior = 'auto';
           targetCard.scrollIntoView({ block: 'start' });
           setActiveId(initialVideoId);
-          
+
           // Restore smooth scroll in the next frame
           requestAnimationFrame(() => {
             container.style.scrollBehavior = 'smooth';
@@ -59,7 +59,7 @@ export default function VideoFeed({ videos, loading, onVideoUpdate, initialVideo
   // Setup Intersection Observer to monitor viewport entry
   useEffect(() => {
     if (loading) return;
-    
+
     const container = feedRef.current;
     if (!container) return;
 
@@ -124,9 +124,8 @@ export default function VideoFeed({ videos, loading, onVideoUpdate, initialVideo
   return (
     <div
       ref={feedRef}
-      className={`h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth relative bg-black w-full transition-opacity duration-200 ${
-        isReady ? 'opacity-100' : 'opacity-0'
-      }`}
+      className={`h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth relative bg-black w-full transition-opacity duration-200 ${isReady ? 'opacity-100' : 'opacity-0'
+        }`}
     >
       {videos.map((video) => (
         <div key={video.id} data-video-id={video.id}>

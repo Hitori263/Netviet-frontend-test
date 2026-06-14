@@ -27,6 +27,20 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [descExpanded, setDescExpanded] = useState(false);
+  const [descOverflow, setDescOverflow] = useState(false);
+  const descRef = useRef<HTMLParagraphElement>(null);
+
+  // Check if description text overflows 3 lines
+  useEffect(() => {
+    if (descRef.current) {
+      const timer = setTimeout(() => {
+        if (descRef.current) {
+          setDescOverflow(descRef.current.scrollHeight > descRef.current.clientHeight);
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [video.description]);
 
   // Overlays
   const [commentsOpen, setCommentsOpen] = useState(false);
@@ -215,7 +229,7 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
 
   return (
     <div className="w-full h-screen snap-start snap-always flex justify-center items-center bg-black relative">
-      <div className="relative w-full h-full md:max-w-[56.25vh] max-md:h-[calc(100vh-64px)] bg-[#050505] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex justify-center items-center">
+      <div className="relative w-full h-full md:max-w-[56.25vh] bg-[#050505] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex justify-center items-center">
         {/* HTML5 Video element */}
         <video
           ref={videoRef}
@@ -223,6 +237,7 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
           className="w-full h-full object-cover cursor-pointer"
           loop
           playsInline
+          muted={isMuted}
           onClick={handleTap}
         />
 
@@ -263,14 +278,13 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
         ))}
 
         {/* Sidebar interactive buttons */}
-        <div className="absolute right-4 bottom-[120px] flex flex-col items-center gap-5 z-10">
+        <div className="absolute right-4 bottom-[120px] max-md:bottom-[140px] flex flex-col items-center gap-5 z-10">
           {/* Profile photo */}
           <div className="relative mb-2">
             <img src={video.authorAvatar} alt={video.authorName} className="w-[50px] h-[50px] rounded-full border-2 border-white object-cover shadow-[0_4px_10px_rgba(0,0,0,0.3)]" />
             <button
-              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-accent text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shadow-[0_2px_5px_rgba(255,59,92,0.4)] transition-all duration-200 hover:scale-110 ${
-                isFollowed ? 'opacity-0 scale-0 pointer-events-none' : ''
-              }`}
+              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-accent text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shadow-[0_2px_5px_rgba(255,59,92,0.4)] transition-all duration-200 hover:scale-110 ${isFollowed ? 'opacity-0 scale-0 pointer-events-none' : ''
+                }`}
               onClick={() => {
                 setIsFollowed(true);
                 const followedAuthors = JSON.parse(localStorage.getItem('followedAuthors') || '[]');
@@ -288,9 +302,8 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
           {/* Heart Button */}
           <div className="flex flex-col items-center gap-1.5 relative">
             <button
-              className={`w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-black/60 hover:scale-110 ${
-                isLiked ? 'text-accent bg-accent/15 border-accent/30 shadow-[0_0_8px_rgba(255,59,92,0.3)]' : 'text-white'
-              }`}
+              className={`w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-black/60 hover:scale-110 ${isLiked ? 'text-accent bg-accent/15 border-accent/30 shadow-[0_0_8px_rgba(255,59,92,0.3)]' : 'text-white'
+                }`}
               onClick={handleLikeClick}
             >
               <Heart size={24} fill={isLiked ? 'currentColor' : 'none'} />
@@ -332,14 +345,16 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
         </div>
 
         {/* Metadata info at the bottom */}
-        <div className="absolute left-4 bottom-6 right-20 z-10 flex flex-col gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+        <div className="absolute left-4 bottom-6 max-md:bottom-[80px] right-20 z-10 flex flex-col gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
           <div className="text-base font-bold tracking-wide">@{video.authorName}</div>
-          <p className={`text-[13.5px] leading-relaxed text-white/85 transition-all duration-300 ${
-            descExpanded ? 'line-clamp-none overflow-visible' : 'line-clamp-3 overflow-hidden'
-          }`}>
+          <p
+            ref={descRef}
+            className={`text-[13.5px] leading-relaxed text-white/85 transition-all duration-300 ${descExpanded ? 'line-clamp-none overflow-visible' : 'line-clamp-3 overflow-hidden'
+              }`}
+          >
             {video.description}
           </p>
-          {video.description.length > 80 && (
+          {descOverflow && (
             <button className="self-start text-[12px] font-bold text-white/60 -mt-0.5" onClick={() => setDescExpanded(!descExpanded)}>
               {descExpanded ? 'Ẩn bớt' : 'Xem thêm'}
             </button>
@@ -355,7 +370,7 @@ export default function VideoCard({ video, isActive, isMuted, toggleMute, onShow
         </div>
 
         {/* Floating vinyl record spinning */}
-        <div className="absolute right-4 bottom-6 z-10">
+        <div className="absolute right-4 bottom-6 max-md:bottom-[80px] z-10">
           <div className="w-11 h-11 rounded-full bg-gradient-to-r from-zinc-800 to-zinc-900 border-[8px] border-zinc-700 shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center justify-center relative">
             <img src={video.authorAvatar} alt="Record album cover" className="w-4 h-4 rounded-full object-cover animate-record" />
             {isPlaying && (
